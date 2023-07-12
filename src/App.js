@@ -1,16 +1,22 @@
 import './App.css';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Home from './pages/Home';
-// import { supabase } from './lib/supabaseClient';
+import SignUp from './pages/Auth/SignUp';
+import Login from './pages/Auth/Login';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/signup" element={<SignUp />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }
