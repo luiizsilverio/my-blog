@@ -35,6 +35,7 @@ function SignUp() {
     <div className="text-center div">
       <form className="form-signin" onSubmit={handleSubmit}>
         <h1 className="h3 mb-3 font-weight-normal">Please sign up</h1>
+
         <label htmlFor="inputEmail" className="sr-only">
           Email address
         </label>
@@ -46,6 +47,7 @@ function SignUp() {
           placeholder="Email address"
           required
         />
+
         <label htmlFor="inputPassword" className="sr-only">
           Password
         </label>
@@ -57,20 +59,23 @@ function SignUp() {
           placeholder="Password"
           required
         />
+
         <div className="checkbox mb-3">
           <label>
             <input type="checkbox" defaultValue="remember-me" /> Remember me
           </label>
         </div>
+
         <button className="btn btn-lg btn-primary btn-block" type="submit">
           Sign up
         </button>
+
         <Link to="/login">
           Login
         </Link>
-      </form>
 
-      { message ? <p>{message}</p> : "" }
+        { message ? <p style={{color: "red"}}>{message}</p> : "" }
+      </form>
     </div>
   );
 }

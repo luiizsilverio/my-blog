@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-expressions */
 import { useContext, useState, useEffect, createContext } from "react";
 import { supabase } from "../lib/supabaseClient";
 
@@ -11,26 +13,59 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState();
 
+  function sign_Out() {
+    supabase.auth.signOut()
+      .then(() => setUser(null))
+  }
+
   useEffect(() => {
-    const session = supabase.auth.getSession();
+    setLoading(true);
 
-    setUser(session?.user ?? null);
-    setLoading(false);
+    supabase.auth.getSession()
+      .then(({ data: { session }}) => {
+        setUser(session?.user ?? null);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      })
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      async (session) => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
         setUser(session?.user ?? null);
         setLoading(false);
       }
     )
 
-    return () => listener?.subscription.unsubscribe();
+    return () => {
+      authListener?.subscription.unsubscribe();
+      setUser(null);
+    }
   }, []);
+
+
+  // useEffect(() => {
+  //   const session = supabase.auth.getSession();
+
+  //   console.log(session)
+  //   setUser(session?.user ?? null);
+  //   setLoading(false);
+
+  //   const { data: listener } = supabase.auth.onAuthStateChange(
+  //     async (session) => {
+  //       setUser(session?.user ?? null);
+  //       setLoading(false);
+  //     }
+  //   )
+
+  //   return () => listener?.subscription.unsubscribe();
+  // }, []);
 
   const value = {
     signUp: (data) => supabase.auth.signUp(data),
     signIn: (data) => supabase.auth.signInWithPassword(data),
-    signOut: () => supabase.auth.signOut(),
+    signOut: () => sign_Out(), //supabase.auth.signOut()
     user,
   }
 
