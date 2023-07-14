@@ -1,12 +1,92 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
-import Nav from "../../layouts/Nav";
-import Footer from "../../layouts/Footer";
+import {v4 as uuid} from "uuid";
+import { useNavigate } from "react-router-dom";
+import Nav from "../../components/layouts/Nav";
+import Footer from "../../components/layouts/Footer";
+import { supabase } from "../../lib/supabaseClient";
 
 function AddPost() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  let navigate = useNavigate();
+
+  async function handleAddPost() {
+    try {
+      const post = {
+        id: uuid(),
+        title,
+        description,
+        content,
+        image
+      }
+
+      let {error} = await supabase
+        .from("post")
+        .insert(post)
+        .then(navigate("/"));
+
+      if (error) {
+        throw error;
+      }
+    }
+    catch (error) {
+      alert(error.message)
+    }
+  }
+
+  async function uploadImage(event) {
+    try {
+      if (!event.target.files || event.target.files.length === 0) {
+        throw new Error("Selecione uma imagem");
+      }
+
+      setUploading(true);
+
+      const file = event.target.files[0];
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = fileName;
+
+      let { data, error: uploadError } = await supabase.storage
+      .from('postimage')
+      .upload(filePath, file,
+        {
+          cacheControl: "3600",
+          upsert: true, // sobrepõe a imagem, caso já exista com esse nome no Storage
+        }
+      );
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      getURL(filePath);
+    }
+    catch(error) {
+      alert(error.message);
+    }
+    finally {
+      setUploading(false);
+    }
+  }
+
+  async function getURL(url) {
+    try {
+      const { data } = supabase.storage
+        .from('postimage')
+        .getPublicUrl(url);
+
+      setImage(data.publicUrl);
+    }
+    catch (error) {
+      alert(error.message);
+    }
+  }
 
   return (
     <>
@@ -16,7 +96,7 @@ function AddPost() {
           <div className="row gx-4 gx-lg-5 justify-content-center">
             <div className="col-md-10 col-lg-8 col-xl-7">
               <div className="post-heading">
-                <h1>AddPost</h1>
+                <h1>Nova Publicação</h1>
               </div>
             </div>
           </div>
@@ -29,7 +109,7 @@ function AddPost() {
               <form>
                 <div>
                   <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Post title</label>
+                    <label className="form-label px-0">Título</label>
                     <input className="form-control"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
@@ -38,7 +118,7 @@ function AddPost() {
                 </div>
                 <div>
                   <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Short description</label>
+                    <label className="form-label px-0">Descrição curta</label>
                     <input className="form-control"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
@@ -47,7 +127,7 @@ function AddPost() {
                 </div>
                 <div>
                   <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Post content</label>
+                    <label className="form-label px-0">Conteúdo da publicação</label>
                     <textarea className="form-control"
                       value={content}
                       onChange={(e) => setContent(e.target.value)}
@@ -56,15 +136,21 @@ function AddPost() {
                 </div>
                 <div>
                   <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Post image</label>
-                    <input type="file" className="form-control" />
+                    <label className="form-label px-0">Imagem</label>
+                    <input type="file" className="form-control"
+                      accept="image/*"
+                      onChange={uploadImage}
+                    />
                   </div>
                 </div>
+
                 <button
-                  className="btn btn-light shadow btn-sm mb-2"
-                  type="submit"
+                  className="btn btn-primary shadow btn-sm mb-2"
+                  type="button"
+                  disabled={uploading}
+                  onClick={handleAddPost}
                 >
-                  Add
+                  {uploading ? "aguarde..." : "ADICIONAR"}
                 </button>
               </form>
             </div>

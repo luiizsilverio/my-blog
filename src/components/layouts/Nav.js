@@ -12,7 +12,7 @@ const Nav = () => {
     signOut();
   }
 
-  console.log('user:', user?.id)
+  // console.log('user:', user?.id)
   return (
     <nav className="navbar navbar-expand-lg navbar-light" id="mainNav">
         <div className="container px-4 px-lg-5">
@@ -24,13 +24,15 @@ const Nav = () => {
             <div className="collapse navbar-collapse" id="navbarResponsive">
                 <ul className="navbar-nav ms-auto py-4 py-lg-0">
                     <li className="nav-item">
-                      <a className="nav-link px-lg-3 py-3 py-lg-4" href="index.html">Início</a>
+                      <a className="nav-link px-lg-3 py-3 py-lg-4" href="/">Início</a>
                     </li>
                     <li className="nav-item">
                       <a className="nav-link px-lg-3 py-3 py-lg-4" href="about.html">Sobre</a>
                     </li>
                     <li className="nav-item">
-                      <a className="nav-link px-lg-3 py-3 py-lg-4" href="post.html">Post</a>
+                      <Link to="/post" className="nav-link px-lg-3 py-3 py-lg-4">
+                        Post
+                      </Link>
                     </li>
                     <li className="nav-item">
                       <a className="nav-link px-lg-3 py-3 py-lg-4" href="contact.html">Contato</a>
