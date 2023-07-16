@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Nav from "../../components/layouts/Nav";
 import Footer from "../../components/layouts/Footer";
 import { supabase } from "../../lib/supabaseClient";
+import { useAuth } from "../../context/AuthContext";
 
 function AddPost() {
   const [title, setTitle] = useState("");
@@ -12,6 +13,7 @@ function AddPost() {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const { user } = useAuth();
 
   let navigate = useNavigate();
 
@@ -102,61 +104,64 @@ function AddPost() {
           </div>
         </div>
       </header>
-      <article className="mb-4">
-        <div className="container px-4 px-lg-5">
-          <div className="row gx-4 gx-lg-5 justify-content-center">
-            <div className="col-md-10 col-lg-8 col-xl-7">
-              <form>
-                <div>
-                  <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Título</label>
-                    <input className="form-control"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Descrição curta</label>
-                    <input className="form-control"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Conteúdo da publicação</label>
-                    <textarea className="form-control"
-                      value={content}
-                      onChange={(e) => setContent(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="mb-3 pb-1">
-                    <label className="form-label px-0">Imagem</label>
-                    <input type="file" className="form-control"
-                      accept="image/*"
-                      onChange={uploadImage}
-                    />
-                  </div>
-                </div>
 
-                <button
-                  className="btn btn-primary shadow btn-sm mb-2"
-                  type="button"
-                  disabled={uploading}
-                  onClick={handleAddPost}
-                >
-                  {uploading ? "aguarde..." : "ADICIONAR"}
-                </button>
-              </form>
+      {user &&
+        <article className="mb-4">
+          <div className="container px-4 px-lg-5">
+            <div className="row gx-4 gx-lg-5 justify-content-center">
+              <div className="col-md-10 col-lg-8 col-xl-7">
+                <form>
+                  <div>
+                    <div className="mb-3 pb-1">
+                      <label className="form-label px-0">Título</label>
+                      <input className="form-control"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="mb-3 pb-1">
+                      <label className="form-label px-0">Descrição curta</label>
+                      <input className="form-control"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="mb-3 pb-1">
+                      <label className="form-label px-0">Conteúdo da publicação</label>
+                      <textarea className="form-control"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="mb-3 pb-1">
+                      <label className="form-label px-0">Imagem</label>
+                      <input type="file" className="form-control"
+                        accept="image/*"
+                        onChange={uploadImage}
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    className="btn btn-primary shadow btn-sm mb-2"
+                    type="button"
+                    disabled={uploading}
+                    onClick={handleAddPost}
+                  >
+                    {uploading ? "aguarde..." : "ADICIONAR"}
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </article>
+        </article>
+      }
       <Footer />
     </>
   );
