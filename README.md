@@ -8,11 +8,11 @@
 * [Contato](#email-contato)
 
 ## Sobre o projeto
-Blog desenvolvido em NextJS com banco de dados, autenticação e Storage do Supabase, durante o curso [ReactJS with Supabase build a full-stack website](https://www.udemy.com/course/reactjs-with-supabase/), do professor Faisal Alhusayni.<br />
+Blog desenvolvido em React com banco de dados, autenticação e Storage do Supabase, durante o curso [ReactJS with Supabase build a full-stack website](https://www.udemy.com/course/reactjs-with-supabase/), do professor Faisal Alhusayni.<br />
 A Aplicação está disponível [aqui](https://my-blog-nine-mauve.vercel.app/).<br />
 
 ## :hammer_and_wrench: Tecnologias
-* __React/Next__
+* __React__
 * __Supabase-js__
 * __React-Router-Dom__
 
