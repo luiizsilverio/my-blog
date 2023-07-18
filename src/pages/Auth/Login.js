@@ -29,8 +29,8 @@ function Login() {
       return;
     }
 
-    emailRef.current.value = '';
-    passwordRef.current.value = '';
+    // emailRef.current.value = '';
+    // passwordRef.current.value = '';
     navigate("/");
     window.location.reload();
   }
@@ -38,44 +38,44 @@ function Login() {
   return (
     <div className="text-center div">
       <form className="form-signin" onSubmit={handleSubmit}>
-        <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <h1 className="h3 mb-3 font-weight-normal">Entrar</h1>
 
         <label htmlFor="inputEmail" className="sr-only">
-          Email address
+          E-Mail
         </label>
         <input
           ref={emailRef}
           type="email"
           id="inputEmail"
           className="form-control"
-          placeholder="Email address"
+          placeholder="Digite o E-mail"
           required
         />
 
         <label htmlFor="inputPassword" className="sr-only">
-          Password
+          Senha
         </label>
         <input
           ref={passwordRef}
           type="password"
           id="inputPassword"
           className="form-control"
-          placeholder="Password"
+          placeholder="Digite a Senha"
           required
         />
 
         <div className="checkbox mb-3">
           <label>
-            <input type="checkbox" defaultValue="remember-me" /> Remember me
+            <input type="checkbox" defaultValue="remember-me" /> Lembrar
           </label>
         </div>
 
         <button className="btn btn-lg btn-primary btn-block" type="submit">
-          Sign in
+          Entrar
         </button>
 
         <Link to="/signup">
-          SignUp
+          Cadastrar
         </Link>
 
         { message ? <p style={{color: "red"}}>{message}</p> : "" }

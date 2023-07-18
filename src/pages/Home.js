@@ -12,15 +12,18 @@ const Home = () => {
   useEffect(() => {
     const getPosts = async () => {
       try {
-        let {data, error, status} = await supabase.from("post").select("*");
+        let {data, error, status} = await supabase
+          .from("post")
+          .select("id, title, description, content, created_at")
+          .limit(10)
+          .order("id", { ascending: false });
 
-        // 406 = Results contain 0 rows, application/vnd.pgrst.object+json requires 1 row
+        // 406 = Results contain 0 rows
         if (error && status !== 406) {
           console.log("error", error);
           throw error;
         }
 
-        console.log(data);
         setData(data);
       }
       catch (error) {

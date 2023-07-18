@@ -12,9 +12,11 @@ function SinglePost() {
   useEffect(() => {
     const getPost = async () => {
       try {
-        const { data, error, status } = await supabase.from("post").select("*").eq("id", id);
+        const { data, error, status } = await supabase.from("post")
+          .select("*")
+          .eq("id", id);
 
-        // 406 = Results contain 0 rows, application/vnd.pgrst.object+json requires 1 row
+        // 406 = Results contain 0 rows
         if (error && status !== 406) {
           console.log("error", error);
           throw error;
